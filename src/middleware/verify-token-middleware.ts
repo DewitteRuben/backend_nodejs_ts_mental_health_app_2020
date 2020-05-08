@@ -15,10 +15,10 @@ const verifyTokenMW: RequestHandler = async (req, res, next) => {
     throw new Error("Token is missing from header.");
   }
 
-  const decodedToken = await verify(token) as { [key: string]: string };
-  delete decodedToken.iat;
+  const decodedPayload = await verify(token) as { [key: string]: string };
+  delete decodedPayload.iat;
 
-  req.body = { ...req.body, auth: decodedToken };
+  req.body = { ...req.body, auth: decodedPayload };
   next();
 };
 
