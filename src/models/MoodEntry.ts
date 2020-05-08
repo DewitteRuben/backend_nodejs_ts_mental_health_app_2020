@@ -11,7 +11,7 @@ export interface IMoodEntry extends Document {
   weight: string;
 }
 
-interface IModel extends Model<IMoodEntry> {}
+interface IMoodEntryModel extends Model<IMoodEntry> {}
 
 const schema = new Schema({
   entryId: { type: String, required: true },
@@ -25,6 +25,6 @@ const schema = new Schema({
   weight: String
 });
 
-const MoodEntry: IModel = model<IMoodEntry, IModel>("MoodEntry", schema);
+const MoodEntry: IMoodEntryModel = model<IMoodEntry, IMoodEntryModel>("MoodEntry", schema);
 
 export default MoodEntry;
