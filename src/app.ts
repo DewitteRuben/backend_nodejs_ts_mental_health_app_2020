@@ -2,7 +2,6 @@ import bodyParser from "body-parser";
 import compression from "compression";
 import express, { NextFunction, Request, Response } from "express";
 import path from "path";
-import bearerToken from "express-bearer-token";
 import { ApplicationError } from "./errors";
 import routes from "./routes";
 
