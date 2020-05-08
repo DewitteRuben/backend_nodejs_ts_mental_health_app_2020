@@ -2,6 +2,7 @@ import bodyParser from "body-parser";
 import compression from "compression";
 import express, { NextFunction, Request, Response } from "express";
 import path from "path";
+import bearerToken from "express-bearer-token";
 import { ApplicationError } from "./errors";
 import routes from "./routes";
 
@@ -14,7 +15,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set("port", process.env.PORT || 3000);
 
 app.use(express.static(path.join(__dirname, "public"), { maxAge: 31557600000 }));
-
 app.use("/api", routes);
 
 app.use((err: ApplicationError, req: Request, res: Response, next: NextFunction) => {
