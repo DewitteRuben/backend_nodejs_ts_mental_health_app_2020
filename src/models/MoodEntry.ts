@@ -16,13 +16,12 @@ interface IMoodEntryModel extends Model<IMoodEntry> {}
 const schema = new Schema({
   entryId: { type: String, required: true },
   userId: { type: String, required: true },
-  date: Date,
-  emotions: Array,
-  experiences: Array,
-  hoursOfSleep: Number,
-  mood: String,
-  thoughts: String,
-  weight: String
+  date: { type: Date, required: true },
+  emotions: { type: [String], required: true },
+  experiences: { type: [String], required: true },
+  hoursOfSleep: { type: Number, required: true },
+  mood: { type: String, required: true },
+  thoughts: String
 });
 
 const MoodEntry: IMoodEntryModel = model<IMoodEntry, IMoodEntryModel>("MoodEntry", schema);
