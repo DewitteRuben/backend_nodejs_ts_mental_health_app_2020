@@ -5,6 +5,7 @@ import handleErrorMiddleware from "../../middleware/handle-error-middleware";
 import { isISODate } from "../../utils/date";
 import { ApplicationError } from "../../errors";
 import User, { IUser } from "../../models/User";
+import { getMissingParamsMessage } from "../../utils/string";
 
 type PartialUserStringified = Partial<Omit<IUser, "birthDate" | "userId"> & { birthDate: string }>;
 
@@ -13,11 +14,8 @@ const add: RequestHandler = async (req: Request<any, any, PartialUserStringified
 
   if (!firstName || !lastName || !birthDate) {
     const params: { [key: string]: string } = { firstName, lastName, birthDate };
-    const missingParamsMessage = Object.keys(params)
-      .map((key) => (!params[key] ? key : undefined))
-      .filter((param) => param)
-      .join(",");
-    throw new ApplicationError(`The request is misisng the following parameters: ${missingParamsMessage}`, 400);
+    const message = getMissingParamsMessage(params);
+    throw new ApplicationError(`The request is missing the following parameters: ${message}`, 400);
   }
 
   if (birthDate && !isISODate(birthDate)) {
@@ -25,7 +23,7 @@ const add: RequestHandler = async (req: Request<any, any, PartialUserStringified
   }
 
   const userId = uuidv4();
-  const user: Partial<IUser> = {
+  const user: IUser = {
     userId,
     firstName,
     lastName,

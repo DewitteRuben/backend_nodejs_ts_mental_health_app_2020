@@ -4,10 +4,17 @@ import MoodEntry from "../../models/MoodEntry";
 import handleErrorMiddleware from "../../middleware/handle-error-middleware";
 import { isISODate } from "../../utils/date";
 import { ApplicationError } from "../../errors";
+import { getMissingParamsMessage } from "../../utils/string";
 
 const add: RequestHandler = async (req, res) => {
-  const { date, emotions, experiences, hoursOfSleep, thoughts, weight, mood } = req.body;
+  const { date, emotions, experiences, hoursOfSleep, thoughts, mood } = req.body;
   const { userId } = req.body.auth;
+
+  if (!date || !emotions || !experiences || !hoursOfSleep || !thoughts || !mood) {
+    const params: { [key: string]: any } = { date, emotions, experiences, hoursOfSleep, thoughts, mood };
+    const message = getMissingParamsMessage(params);
+    throw new ApplicationError(`The request is missing the following parameters: ${message}`, 400);
+  }
 
   if (!userId) {
     throw new ApplicationError("Cannot create mood entry, unauthorized", 401);
@@ -35,7 +42,6 @@ const add: RequestHandler = async (req, res) => {
     experiences,
     hoursOfSleep,
     thoughts,
-    weight,
     mood
   });
 
