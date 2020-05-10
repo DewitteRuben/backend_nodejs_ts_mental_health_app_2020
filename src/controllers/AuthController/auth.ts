@@ -1,19 +1,23 @@
 import { RequestHandler } from "express";
 import handleErrorMiddleware from "../../middleware/handle-error-middleware";
-import { sign, verify } from "../../utils/jwt";
+import { sign } from "../../utils/jwt";
+import { ApplicationError } from "../../errors";
+import { exists } from "../../utils/user";
 
 const auth: RequestHandler = async (req, res) => {
   const { userId } = req.body;
 
-  if (userId) {
-    // check if user exists
+  const userExists = await exists(userId);
+
+  if (!userExists) {
+    throw new ApplicationError("No user was found that matches the userId", 401);
   }
 
   const token = await sign({ userId });
 
   return res.json({
     token
-  });
+  }).status(200);
 };
 
 export default handleErrorMiddleware(auth);
