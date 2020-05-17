@@ -13,9 +13,9 @@ interface IUserModel extends Model<IUserDocument> {}
 
 const schema = new Schema({
   userId: { type: String, required: true },
-  firstName: String,
-  lastName: String,
-  birthDate: Date
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  birthDate: { type: Date, required: true }
 });
 
 const User: IUserModel = model<IUserDocument, IUserModel>("User", schema);
