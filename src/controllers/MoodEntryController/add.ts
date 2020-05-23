@@ -7,12 +7,12 @@ import { ApplicationError } from "../../errors";
 import { getMissingParamsMessage } from "../../utils/string";
 
 const add: RequestHandler = async (req, res) => {
-  const { date, emotions, experiences, hoursOfSleep, thoughts, mood } = req.body;
+  const { date, emotions, experiences, sleep: hoursOfSleep, thoughts, mood, entryId } = req.body;
   const { userId } = req.body.auth;
 
-  if (!date || !emotions || !experiences || !hoursOfSleep || !thoughts || !mood) {
-    const params: { [key: string]: any } = { date, emotions, experiences, hoursOfSleep, thoughts, mood };
-    const message = getMissingParamsMessage(params);
+  const params: { [key: string]: any } = { entryId, date, emotions, experiences, hoursOfSleep, thoughts, mood };
+  const message = getMissingParamsMessage(params);
+  if (message.length > 0 || !date || !emotions || !experiences || !hoursOfSleep || !thoughts || !mood) {
     throw new ApplicationError(`The request is missing the following parameters: ${message}`, 400);
   }
 
@@ -31,8 +31,6 @@ const add: RequestHandler = async (req, res) => {
   if (!Array.isArray(experiences)) {
     throw new ApplicationError("The supplied experiences should of be in array format", 400);
   }
-
-  const entryId = uuidv4();
 
   const moodEntry = await MoodEntry.create({
     entryId,
