@@ -7,6 +7,10 @@ import { exists } from "../../utils/user";
 const auth: RequestHandler = async (req, res) => {
   const { userId } = req.body;
 
+  if (!userId) {
+    throw new ApplicationError("Missing userId from request body.", 400);
+  }
+
   const userExists = await exists(userId);
 
   if (!userExists) {
