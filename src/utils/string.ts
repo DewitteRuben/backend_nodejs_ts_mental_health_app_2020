@@ -1,13 +1,13 @@
-const getMissingParamsMessage = (...props: any[]) => {
-  const params: { [key: string]: any } = { ...props };
+const getMissingParamsMessage = (object: object) => {
+  const params: { [key: string]: any } = { ...object };
   return Object.keys(params)
     .map((key) => {
       const value = params[key];
       if (!value) return undefined;
-      if (Array.isArray(value)) return value.length > 0;
+      if (Array.isArray(value) && value.length === 0) return undefined;
       return key;
     })
-    .filter((param) => param)
+    .filter((param) => !param)
     .join(",");
 };
 
