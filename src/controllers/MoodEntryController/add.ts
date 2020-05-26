@@ -7,7 +7,7 @@ import { ApplicationError } from "../../errors";
 import { getMissingParamsMessage } from "../../utils/string";
 
 const add: RequestHandler = async (req, res) => {
-  const { date, emotions, experiences, sleep: hoursOfSleep, thoughts, mood, entryId } = req.body;
+  const { date, emotions, experiences, hoursOfSleep, thoughts, mood, entryId } = req.body;
   const { userId } = req.body.auth;
 
   const params: { [key: string]: any } = { entryId, date, emotions, experiences, hoursOfSleep, thoughts, mood };
