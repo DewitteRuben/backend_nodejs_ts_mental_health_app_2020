@@ -20,7 +20,7 @@ const authProfessional: RequestHandler = async (req, res) => {
     throw new ApplicationError("Login credentials are invalid or the requested user was not found", 401);
   }
 
-  const token = sign({ email, password });
+  const token = await sign({ email, password });
 
   return res.json({ token }).status(200);
 };
