@@ -30,7 +30,7 @@ const schema = new Schema<IProfessionalDocument>({
 
 async function encryptPassword(this: IProfessionalDocument, next: any) {
   const { password } = this;
-  if (!this.isModified(password)) return next();
+  if (!this.isNew) return next();
 
   const hashedPassword = await bcrypt.hash(password, saltRounds);
   this.password = hashedPassword;
