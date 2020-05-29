@@ -17,7 +17,6 @@ const verifyTokenMW: RequestHandler = async (req, res, next) => {
   }
 
   const decodedPayload = (await verify(token)) as { [key: string]: string };
-  delete decodedPayload.iat;
 
   req.body = { ...req.body, auth: decodedPayload };
   next();

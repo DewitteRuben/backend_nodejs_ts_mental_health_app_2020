@@ -24,7 +24,7 @@ const verifyKeyAsync = (token: string, secretOrPublicKey: jwt.Secret, options?: 
 
 const sign = async (payload: string | object | Buffer) => {
   const privateKey = await fs.readFile(path.join(__dirname, "/../keys/private.key"));
-  return signKeyAsync(payload, privateKey, { algorithm: "RS256", expiresIn: "120s" });
+  return signKeyAsync(payload, privateKey, { algorithm: "RS256", expiresIn: "120s", noTimestamp: true });
 };
 
 const verify = async (token: string) => {
