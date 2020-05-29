@@ -10,12 +10,17 @@ const add: RequestHandler = async (req, res) => {
   const { email, firstName, lastName, password, birthDate } = req.body;
 
   const message = getMissingParamsMessage({ email, firstName, lastName, password, birthDate });
-  if (message.length > 0 || !email || !firstName || !lastName || !password || birthDate) {
+  if (message.length > 0 || !email || !firstName || !lastName || !password || !birthDate) {
     throw new ApplicationError(`The following parameters are missing: ${message}`, 400);
   }
 
   if (!isISODate(birthDate)) {
     throw new ApplicationError("The supplied date is not of valid ISO8061 format.", 400);
+  }
+
+  const alreadyExists = await Professional.exists({ email });
+  if (alreadyExists) {
+    throw new ApplicationError("A user with given email address already exists.", 400);
   }
 
   const professionalId = uuid();
