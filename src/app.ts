@@ -3,12 +3,14 @@ import compression from "compression";
 import express, { NextFunction, Request, Response } from "express";
 import path from "path";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import { ApplicationError } from "./errors";
 import routes from "./routes";
 
 const app = express();
 
-app.use(cors());
+app.use(cookieParser());
+app.use(cors({ credentials: true, allowedHeaders: ["Set-Cookie", "Content-Type"], origin: "http://localhost:3000" }));
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
