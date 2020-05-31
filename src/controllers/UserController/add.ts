@@ -10,11 +10,11 @@ import { getMissingParamsMessage } from "../../utils/string";
 type PartialUserStringified = Partial<Omit<IUser, "birthDate" | "userId"> & { birthDate: string }>;
 
 const add: RequestHandler = async (req: Request<any, any, PartialUserStringified>, res) => {
-  const { firstName, lastName, birthDate } = req.body;
+  const { firstName, lastName, birthDate, email } = req.body;
 
-  if (!firstName || !lastName || !birthDate) {
-    const params: { [key: string]: string } = { firstName, lastName, birthDate };
-    const message = getMissingParamsMessage(params);
+  const params: { [key: string]: string } = { firstName, lastName, birthDate, email };
+  const message = getMissingParamsMessage(params);
+  if (message.length > 0 || !firstName || !lastName || !birthDate || !email) {
     throw new ApplicationError(`The request is missing the following parameters: ${message}`, 400);
   }
 
@@ -24,6 +24,7 @@ const add: RequestHandler = async (req: Request<any, any, PartialUserStringified
 
   const userId = uuidv4();
   const user: IUser = {
+    email,
     userId,
     firstName,
     lastName,
