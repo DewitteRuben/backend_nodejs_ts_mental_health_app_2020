@@ -24,7 +24,18 @@ const verifyKeyAsync = (token: string, secretOrPublicKey: jwt.Secret, options?: 
 
 const sign = async (payload: string | object | Buffer) => {
   const privateKey = await fs.readFile(path.join(__dirname, "/../keys/private.key"));
-  return signKeyAsync(payload, privateKey, { algorithm: "RS256", expiresIn: "120s", noTimestamp: true });
+  return signKeyAsync(payload, privateKey, { algorithm: "RS256", expiresIn: "15m" });
+};
+
+const signRefresh = async (payload: string | object | Buffer) => {
+  const privateKey = await fs.readFile(path.join(__dirname, "/../keys/refresh/private.key"));
+  return signKeyAsync(payload, privateKey, { algorithm: "RS256", expiresIn: "14d" });
+};
+
+const verifyRefresh = async (token: string) => {
+  const publicKey = await fs.readFile(path.join(__dirname, "/../keys/refresh/public.key"));
+  const decodedToken = await verifyKeyAsync(token, publicKey, { algorithms: ["RS256"] });
+  return decodedToken;
 };
 
 const verify = async (token: string) => {
@@ -33,4 +44,4 @@ const verify = async (token: string) => {
   return decodedToken;
 };
 
-export { verify, sign };
+export { verify, sign, signRefresh, verifyRefresh };
