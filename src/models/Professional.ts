@@ -11,6 +11,7 @@ export interface IProfessional {
   lastName: string;
   password: string;
   birthDate: Date;
+  clients: string[];
   compare: (password: string) => Promise<boolean>;
 }
 
