@@ -6,14 +6,15 @@ import { getMissingParamsMessage } from "../../utils/string";
 import { ApplicationError } from "../../errors";
 import { isISODate } from "../../utils/date";
 import User, { IUser } from "../../models/User";
+import { populateClientIds } from "../../utils/professional";
 
 const registerUser: RequestHandler = async (req, res) => {
   const { professionalId } = req.body.auth;
-  const { firstName, lastName, birthDate } = req.body;
+  const { email, firstName, lastName, birthDate } = req.body;
 
-  if (!firstName || !lastName || !birthDate) {
-    const params: { [key: string]: string } = { firstName, lastName, birthDate };
-    const message = getMissingParamsMessage(params);
+  const params: { [key: string]: string } = { firstName, lastName, birthDate, email };
+  const message = getMissingParamsMessage(params);
+  if (message.length > 0 || !email || !firstName || !lastName || !birthDate) {
     throw new ApplicationError(`The request is missing the following parameters: ${message}`, 400);
   }
 
@@ -24,6 +25,7 @@ const registerUser: RequestHandler = async (req, res) => {
   const userId = uuid();
   const user: IUser = {
     userId,
+    email,
     firstName,
     lastName,
     birthDate: new Date(birthDate)
@@ -33,14 +35,19 @@ const registerUser: RequestHandler = async (req, res) => {
 
   const updatedDoc = await Professional.findOneAndUpdate(
     { professionalId },
-    { $push: { clients: createdUser.userId } }
+    { $push: { clients: createdUser.userId } },
+    { new: true }
   );
+
+  const updatedProfessional = updatedDoc.toJSON();
+  const populatedClients = await populateClientIds(updatedDoc.clients);
+
+  updatedProfessional.clients = populatedClients;
 
   return res
     .json({
       message: "Successfully added new client to professional.",
-      professional: updatedDoc.toJSON(),
-      user: createdUser.toJSON()
+      professional: updatedProfessional
     })
     .status(200);
 };
