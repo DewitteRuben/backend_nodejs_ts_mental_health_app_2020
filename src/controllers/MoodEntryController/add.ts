@@ -10,9 +10,9 @@ const add: RequestHandler = async (req, res) => {
   const { date, emotions, experiences, hoursOfSleep, thoughts, mood, entryId } = req.body;
   const { userId } = req.body.auth;
 
-  const params: { [key: string]: any } = { entryId, date, emotions, experiences, hoursOfSleep, thoughts, mood };
+  const params: { [key: string]: any } = { entryId, date, emotions, experiences, hoursOfSleep, mood };
   const message = getMissingParamsMessage(params);
-  if (message.length > 0 || !date || !emotions || !experiences || !hoursOfSleep || !thoughts || !mood) {
+  if (message.length > 0 || !date || !emotions || !experiences || !hoursOfSleep || !mood) {
     throw new ApplicationError(`The request is missing the following parameters: ${message}`, 400);
   }
 
@@ -39,7 +39,7 @@ const add: RequestHandler = async (req, res) => {
     emotions,
     experiences,
     hoursOfSleep,
-    thoughts,
+    ...(thoughts && { thoughts }),
     mood
   });
 
