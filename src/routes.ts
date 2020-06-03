@@ -4,6 +4,7 @@ import apiSpec from "../openapi.json";
 import * as AuthController from "./controllers/AuthController";
 import * as MoodEntryController from "./controllers/MoodEntryController";
 import * as ProfessionalController from "./controllers/ProfessionalController/index";
+import * as TaskController from "./controllers/TaskController/index";
 import verifyUserMiddleware from "./middleware/verify-user-middleware";
 import verifyProfessionalMiddleware from "./middleware/verify-professional-middleware";
 
@@ -24,6 +25,11 @@ router.delete("/user", verifyProfessionalMiddleware, ProfessionalController.dele
 router.get("/moodentry", verifyUserMiddleware, MoodEntryController.filter);
 router.get("/moodentry", verifyUserMiddleware, MoodEntryController.all);
 router.post("/moodentry", verifyUserMiddleware, MoodEntryController.add);
+
+router.get("/task", verifyUserMiddleware, TaskController.all);
+router.post("/task", verifyProfessionalMiddleware, TaskController.add);
+router.put("/task/user", verifyUserMiddleware, TaskController.update);
+router.delete("/task", verifyProfessionalMiddleware, TaskController.deleteTask);
 
 // Dev routes
 if (process.env.NODE_ENV === "development") {
