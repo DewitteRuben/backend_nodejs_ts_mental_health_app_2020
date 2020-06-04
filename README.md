@@ -1,4 +1,4 @@
-# NodeJS backend of Saiko 2020, mental health app project
+# NodeJS backend of PsyTrack, mental health app project
 
 ## Setup
 
