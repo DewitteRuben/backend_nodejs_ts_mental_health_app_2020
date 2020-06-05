@@ -6,7 +6,7 @@
 
 This project uses JWT for its authentication system, in order for this to work RS256 private and public keys for authentication and refresh token, must be provided.
 
-Create a `keys` folder in de `src` directory that include both `private.key` and `public.key` files, example:
+Create a `keys` folder in the `src` directory that include both `private.key` and `public.key` files, example:
 
 Keys for the authentication token:
 
@@ -15,11 +15,11 @@ src/keys/private.key
 src/keys/public.key
 ```
 
-Keys for the 
+Keys for the refresh token:
 
 ```
-keys/refresh/private.key
-keys/refresh/public.key
+src/keys/refresh/private.key
+src/keys/refresh/public.key
 ```
 
 Read more on jsonwebtoken [here](https://github.com/auth0/node-jsonwebtoken).
